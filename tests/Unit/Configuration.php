@@ -8,6 +8,7 @@ test('runtime', function () {
         'project',
         'environment',
         'queue',
+        'queues',
     ]);
 });
 

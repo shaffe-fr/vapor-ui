@@ -12,9 +12,13 @@ return [
     'project' => env('VAPOR_PROJECT', Cloud::project()),
     'environment' => env('VAPOR_ENVIRONMENT', Cloud::environment()),
 
-    // SQS Queue
+    // Main SQS Queue
     'queue' => [
         'prefix' => env('SQS_PREFIX'),
         'name' => env('SQS_QUEUE'),
     ],
+
+    // SQS queues names
+    // Leave null to use configuration from vapor.yml manifest.
+    'queues' => null,
 ];

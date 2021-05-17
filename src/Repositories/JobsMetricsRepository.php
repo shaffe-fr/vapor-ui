@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Queue\Failed\FailedJobProviderInterface;
 use Illuminate\Support\Carbon;
 use Laravel\VaporUi\Support\Cloud;
+use Laravel\VaporUi\Support\Manifest;
 
 class JobsMetricsRepository
 {
@@ -239,9 +240,12 @@ class JobsMetricsRepository
     protected function logs($payload)
     {
         return $this->cloudWatch->getMetricStatistics(array_merge_recursive([
-            'Dimensions' => [[
-                'Name' => 'QueueName', 'Value' => config('vapor-ui.queue.name'),
-            ]],
+            'Dimensions' => collect(config('vapor-ui.queues') ?? [config('vapor-ui.queue.name')])
+                ->filter()
+                ->map(function ($queueName) {
+                    return ['Name' => 'QueueName', 'Value' => $queueName];
+                })
+                ->all(),
             'Namespace' => 'AWS/SQS',
         ], $payload))->toArray();
     }

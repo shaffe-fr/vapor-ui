@@ -3,6 +3,7 @@
 namespace Laravel\VaporUi\Concerns;
 
 use Illuminate\Support\Facades\Config;
+use Laravel\VaporUi\Support\Manifest;
 
 trait ConfiguresVaporUi
 {
@@ -28,5 +29,9 @@ trait ConfiguresVaporUi
                 'name' => $_ENV['SQS_QUEUE'] ?? null,
             ],
         ], Config::get('vapor-ui') ?? []));
+
+        if (Config::get('vapor-ui.queues') === null) {
+            Config::set('vapor-ui.queues', Manifest::queues() ?: [Config::get('vapor-ui.queue.name')]);
+        }
     }
 }
